@@ -1,9 +1,9 @@
 import { Client } from "@notionhq/client";
 import dotenv from "dotenv";
 
-import { getCategories } from "./api/categories.js";
-import { getReview } from "./api/review.js";
-import { getAllReviews } from "./api/reviews.js";
+import { getCategories } from "./api/categories";
+import { getReview } from "./api/review";
+import { getAllReviews } from "./api/reviews";
 
 dotenv.config();
 

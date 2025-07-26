@@ -1,9 +1,11 @@
 {
   "name": "melb-food",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "notion.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "node dist/notion.js",
+    "dev": "ts-node src/notion.ts"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +16,9 @@
     "notion-to-md": "^3.1.9"
   },
   "devDependencies": {
-    "dotenv": "^17.2.1"
-  },
-  "type": "module"
+    "@types/node": "^24.1.0",
+    "dotenv": "^17.2.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
 }
