@@ -1,4 +1,5 @@
-const PROPERTY_TYPES = ["rich_text", "select", "multi_select"];
+import { Client, PageObjectResponse } from "@notionhq/client";
+import { ReviewDatabaseRow } from "../types/notion";
 
 const extractProperty = (property) => {
   if (property.type === "rich_text") {
@@ -13,7 +14,7 @@ const extractProperty = (property) => {
   return "";
 };
 
-const notionBlockToObject = (block) => {
+const notionBlockToObject = (block: PageObjectResponse): ReviewDatabaseRow => {
   return {
     id: block.id,
     created_time: block.created_time,
@@ -27,10 +28,13 @@ const notionBlockToObject = (block) => {
   };
 };
 
-export const getAllReviews = async (notion, databaseId) => {
+export const getAllReviews = async (
+  notion: Client,
+  databaseId: string
+): Promise<ReviewDatabaseRow[]> => {
   const database = await notion.databases.query({ database_id: databaseId });
 
-  return database.results.map((block) => {
+  return database.results.map((block: PageObjectResponse) => {
     return notionBlockToObject(block);
   });
 };

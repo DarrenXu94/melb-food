@@ -1,4 +1,6 @@
-export const getCategories = async (notion, databaseId) => {
+import { Client } from "@notionhq/client";
+
+export const getCategories = async (notion: Client, databaseId: string) => {
   const db = await notion.databases.retrieve({
     database_id: databaseId,
   });

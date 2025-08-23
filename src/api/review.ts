@@ -1,6 +1,13 @@
+import { Client } from "@notionhq/client";
 import { NotionToMarkdown } from "notion-to-md";
 
-export const getReview = async (notion, pageId) => {
+/**
+ * Gets a review markdown string from a Notion page.
+ * @param notion
+ * @param pageId
+ * @returns
+ */
+export const getReview = async (notion: Client, pageId: string) => {
   const n2m = new NotionToMarkdown({ notionClient: notion });
 
   const mdblocks = await n2m.pageToMarkdown(pageId);
