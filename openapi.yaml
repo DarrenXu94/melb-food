@@ -1,0 +1,277 @@
+openapi: 3.0.3
+info:
+  title: Melbourne Food Reviews API
+  description: API for retrieving food reviews and categories from Notion database
+  version: 1.0.0
+  license:
+    name: ISC
+    url: https://opensource.org/licenses/ISC
+  contact:
+    name: API Support
+    email: support@example.com
+
+servers:
+  - url: https://your-netlify-site.netlify.app/.netlify/functions
+    description: Production server
+  - url: http://127.0.0.1:8888/.netlify/functions
+    description: Local development server
+
+security: []
+
+paths:
+  /getAllReviews:
+    get:
+      summary: Get all reviews
+      description: Retrieves all reviews from the Notion database
+      operationId: getAllReviews
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reviews:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ReviewDatabaseRow"
+              example:
+                reviews:
+                  - id: "12345678-1234-1234-1234-123456789012"
+                    created_time: "2024-01-15T10:30:00.000Z"
+                    properties:
+                      - name: "Restaurant Name"
+                        type: "rich_text"
+                        value: "Lune Croissanterie"
+                      - name: "Rating"
+                        type: "select"
+                        value: "5 stars"
+                      - name: "Cuisine"
+                        type: "multi_select"
+                        value: ["French", "Pastry"]
+        "405":
+          description: Method not allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /getCategories:
+    get:
+      summary: Get categories
+      description: Retrieves all categories and their options from the Notion database
+      operationId: getCategories
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+              example:
+                - name: "Rating"
+                  type: "select"
+                  options:
+                    - name: "1 star"
+                      color: "red"
+                    - name: "2 stars"
+                      color: "orange"
+                    - name: "3 stars"
+                      color: "yellow"
+                    - name: "4 stars"
+                      color: "blue"
+                    - name: "5 stars"
+                      color: "green"
+                - name: "Cuisine"
+                  type: "multi_select"
+                  options:
+                    - name: "Italian"
+                      color: "green"
+                    - name: "Japanese"
+                      color: "red"
+                    - name: "Thai"
+                      color: "orange"
+        "405":
+          description: Method not allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /getReview:
+    get:
+      summary: Get a specific review
+      description: Retrieves a specific review as markdown content from a Notion page
+      operationId: getReview
+      parameters:
+        - name: pageId
+          in: query
+          required: true
+          description: The Notion page ID of the review
+          schema:
+            type: string
+            example: "12345678-1234-1234-1234-123456789012"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  review:
+                    type: string
+                    description: The review content in markdown format
+              example:
+                review: |
+                  # Lune Croissanterie
+
+                  ## Rating: 5/5
+
+                  This is an amazing croissanterie in Melbourne CBD. The croissants are perfectly flaky and buttery.
+
+                  ### What I ordered:
+                  - Classic Croissant
+                  - Pain au Chocolat
+
+                  ### Verdict:
+                  Absolutely worth the hype!
+        "400":
+          description: Bad request - missing pageId parameter
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "405":
+          description: Method not allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    ReviewDatabaseRow:
+      type: object
+      description: A review entry from the Notion database
+      properties:
+        id:
+          type: string
+          description: The Notion page ID
+          example: "12345678-1234-1234-1234-123456789012"
+        created_time:
+          type: string
+          format: date-time
+          description: When the review was created
+          example: "2024-01-15T10:30:00.000Z"
+        properties:
+          type: array
+          description: Array of properties from the Notion page
+          items:
+            $ref: "#/components/schemas/Property"
+      required:
+        - id
+        - created_time
+        - properties
+
+    Property:
+      type: object
+      description: A property from a Notion page
+      properties:
+        name:
+          type: string
+          description: The property name
+          example: "Restaurant Name"
+        type:
+          type: string
+          description: The property type
+          enum: ["rich_text", "select", "multi_select"]
+          example: "rich_text"
+        value:
+          oneOf:
+            - type: string
+              description: Single value for rich_text and select types
+            - type: array
+              items:
+                type: string
+              description: Array of values for multi_select type
+          example: "Lune Croissanterie"
+      required:
+        - name
+        - type
+        - value
+
+    Category:
+      type: object
+      description: A category definition from the Notion database
+      properties:
+        name:
+          type: string
+          description: The category name
+          example: "Rating"
+        type:
+          type: string
+          description: The category type
+          enum: ["select", "multi_select"]
+          example: "select"
+        options:
+          type: array
+          description: Available options for this category
+          items:
+            $ref: "#/components/schemas/CategoryOption"
+      required:
+        - name
+        - type
+        - options
+
+    CategoryOption:
+      type: object
+      description: An option within a category
+      properties:
+        name:
+          type: string
+          description: The option name
+          example: "5 stars"
+        color:
+          type: string
+          description: The color associated with this option
+          example: "green"
+      required:
+        - name
+        - color
+
+    Error:
+      type: object
+      description: Error response
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Internal server error"
+        message:
+          type: string
+          description: Detailed error message
+          example: "Failed to connect to Notion API"
+      required:
+        - error

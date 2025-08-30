@@ -1,11 +1,16 @@
 {
   "name": "melb-food",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "main": "notion.js",
   "scripts": {
     "build": "tsc",
+    "build:functions": "tsc --project netlify/functions/tsconfig.json",
     "start": "node dist/notion.js",
-    "dev": "ts-node src/notion.ts"
+    "dev": "ts-node src/notion.ts",
+    "docs:generate": "typedoc src/api/*.ts src/types/*.ts --out docs --excludePrivate --excludeProtected --excludeExternals",
+    "docs:serve": "npx http-server docs -p 8080 -o",
+    "openapi:validate": "npx @redocly/cli lint openapi.yaml",
+    "openapi:serve": "npx @redocly/cli preview-docs openapi.yaml"
   },
   "keywords": [],
   "author": "",
@@ -16,9 +21,14 @@
     "notion-to-md": "^3.1.9"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.133",
     "@types/node": "^24.1.0",
     "dotenv": "^17.2.1",
+    "netlify-cli": "^23.3.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "typedoc": "^0.27.0",
+    "@redocly/cli": "^1.0.0",
+    "http-server": "^14.1.1"
   }
 }
