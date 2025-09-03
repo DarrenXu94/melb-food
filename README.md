@@ -15,7 +15,7 @@ This project provides Netlify functions for accessing Melbourne food review data
 **Method:** GET  
 **Query Parameters:** `pageId` (required) - The Notion page ID  
 **Description:** Retrieves a single review as markdown from a Notion page  
-**Response:** Object containing the review markdown
+**Response:** String of review markdown
 
 ### 3. getAllReviews
 **Endpoint:** `/.netlify/functions/getAllReviews` or `/api/getAllReviews`  
