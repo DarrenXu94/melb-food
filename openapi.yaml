@@ -113,11 +113,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /getReview:
+  /getMarkdownFromReview:
     get:
-      summary: Get a specific review
-      description: Retrieves a specific review as markdown content from a Notion page
-      operationId: getReview
+      summary: Get review markdown by Notion page ID
+      description: Retrieves review content in markdown format for a given Notion page ID
+      operationId: getMarkdownFromReview
       parameters:
         - name: pageId
           in: query
@@ -136,7 +136,7 @@ paths:
                 properties:
                   review:
                     type: string
-                    description: The review content in markdown format
+                    description: Review content in markdown format
               example:
                 review: |
                   # Lune Croissanterie

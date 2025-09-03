@@ -61,7 +61,7 @@ export const handler = async (
     // Initialize Notion client
     const notion = new Client({ auth: notionKey });
 
-    // Get review
+    // Get review markdown
     const review = await getReview(notion, pageId);
 
     return {
@@ -70,8 +70,7 @@ export const handler = async (
       body: JSON.stringify({ review }),
     };
   } catch (error) {
-    console.error("Error in getReview function:", error);
-
+    console.error("Error in getMarkdownFromReview function:", error);
     return {
       statusCode: 500,
       headers: {

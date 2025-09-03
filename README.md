@@ -10,11 +10,11 @@ This project provides Netlify functions for accessing Melbourne food review data
 **Description:** Retrieves all categories from the Notion database  
 **Response:** Array of category objects with name, type, and options
 
-### 2. getReview
-**Endpoint:** `/.netlify/functions/getReview` or `/api/getReview`  
+### 2. getMarkdownFromReview
+**Endpoint:** `/.netlify/functions/getMarkdownFromReview` or `/api/getMarkdownFromReview`  
 **Method:** GET  
 **Query Parameters:** `pageId` (required) - The Notion page ID  
-**Description:** Retrieves a single review as markdown from a Notion page  
+**Description:** Retrieves a review as markdown from a Notion page ID  
 **Response:** String of review markdown
 
 ### 3. getAllReviews
@@ -60,9 +60,9 @@ Make sure to set these environment variables in your Netlify dashboard:
 curl https://your-site.netlify.app/.netlify/functions/getCategories
 ```
 
-### Get Review
+### Get Review Markdown
 ```bash
-curl "https://your-site.netlify.app/.netlify/functions/getReview?pageId=your_page_id"
+curl "https://your-site.netlify.app/.netlify/functions/getMarkdownFromReview?pageId=your_page_id"
 ```
 
 ### Get All Reviews

@@ -19,8 +19,8 @@ Retrieves all categories and their options from the Notion database.
 
 **Response:** `GetCategoriesResponse` (Category[])
 
-### 3. `GET /.netlify/functions/getReview?pageId={id}`
-Retrieves a specific review as markdown content from a Notion page.
+### 3. `GET /.netlify/functions/getMarkdownFromReview?pageId={id}`
+Retrieves review markdown content for a specific Notion page.
 
 **Parameters:**
 - `pageId` (required): The Notion page ID
@@ -141,7 +141,7 @@ curl "https://your-netlify-site.netlify.app/.netlify/functions/getCategories"
 
 ### Get Specific Review
 ```bash
-curl "https://your-netlify-site.netlify.app/.netlify/functions/getReview?pageId=12345678-1234-1234-1234-123456789012"
+curl "https://your-netlify-site.netlify.app/.netlify/functions/getMarkdownFromReview?pageId=12345678-1234-1234-1234-123456789012"
 ```
 
 ## 🛠️ Development
