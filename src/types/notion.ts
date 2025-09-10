@@ -17,7 +17,7 @@ export interface Property {
   /** The property name */
   name: string;
   /** The property type */
-  type: "rich_text" | "select" | "multi_select";
+  type: "rich_text" | "select" | "multi_select" | "files";
   /** The property value - can be a single string or array of strings for multi-select */
   value: string | string[];
 }

@@ -2,6 +2,44 @@ import { Client, PageObjectResponse } from "@notionhq/client";
 import { ReviewDatabaseRow, Property } from "../types/notion";
 
 /**
+ * @param fileProperty - An array of file objects from a Notion page
+ * @returns An array of URLs extracted from the file objects
+ * @description This function extracts URLs from both file and external file types in Notion.
+ * It handles both the `file` type (which contains a URL and expiry time) and the `external` type (which contains a URL).
+ * If the property is not of these types, it returns an empty string.
+ */
+const getUrlsFromFiles = (
+  fileProperty: Array<
+    | {
+        file: {
+          url: string;
+          expiry_time: string;
+        };
+        name: string;
+        type?: "file";
+      }
+    | {
+        external: {
+          url: string;
+        };
+        name: string;
+        type?: "external";
+      }
+  >
+): string[] => {
+  return fileProperty
+    .map((file) => {
+      if (file.type === "file" && file.file) {
+        return file.file.url;
+      } else if (file.type === "external" && file.external) {
+        return file.external.url;
+      }
+      return "";
+    })
+    .filter((url) => url !== "");
+};
+
+/**
  * Extracts the value from a Notion property based on its type
  * @param property - The Notion property object
  * @returns The extracted value as string or string array
@@ -15,7 +53,10 @@ const extractProperty = (property: any): string | string[] => {
     return property.multi_select
       ? property.multi_select.map((option: any) => option.name)
       : [];
+  } else if (property.type === "files") {
+    return getUrlsFromFiles(property.files);
   }
+
   return "";
 };
 
