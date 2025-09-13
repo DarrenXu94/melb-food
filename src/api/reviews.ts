@@ -55,6 +55,8 @@ const extractProperty = (property: any): string | string[] => {
       : [];
   } else if (property.type === "files") {
     return getUrlsFromFiles(property.files);
+  } else if (property.type === "title") {
+    return property.title.map((text: any) => text.plain_text).join("");
   }
 
   return "";
